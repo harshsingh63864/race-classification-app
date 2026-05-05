@@ -51,3 +51,9 @@ uploads/
 # Environment variables
 .env
 .env.local
+
+# Large model files
+clip_lvm_model.pt
+*.pt
+*.pth
+
