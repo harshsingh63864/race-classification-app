@@ -27,12 +27,23 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 # Create uploads folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+import urllib.request
+
+MODEL_PATH = "clip_lvm_model.pt"
+if not os.path.exists(MODEL_PATH):
+    print("⏳ Downloading model from GitHub Releases...")
+    urllib.request.urlretrieve(
+        "https://github.com/harshsingh63864/race-classification-app/releases/download/v1.0/clip_lvm_model.pt",
+        MODEL_PATH
+    )
+    print("✅ Model downloaded!")
+
 # Load model and features
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
 # Load saved model checkpoint
-checkpoint = torch.load('clip_lvm_model.pt', map_location=device)
+checkpoint = torch.load(MODEL_PATH, map_location=device)  # ← changed 'clip_lvm_model.pt' to MODEL_PATH
 text_features = checkpoint['text_features'].to(device)
 class_names = checkpoint['class_names']
 
